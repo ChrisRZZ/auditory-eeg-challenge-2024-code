@@ -97,7 +97,8 @@ if __name__ == "__main__":
 
     # create the model
     model = vlaai()
-    model.compile(tf.keras.optimizers.Adam(), loss=pearson_loss, metrics=[pearson_metric])
+    #model.compile(tf.keras.optimizers.Adam(), loss=pearson_loss, metrics=[pearson_metric])
+    model.compile(tf.keras.optimizers.legacy.Adam(), loss=pearson_loss, metrics=[pearson_metric]) #this is for M1/M2 Mac
     model_path = os.path.join(results_folder, "model.h5")
 
     if only_evaluate:
@@ -124,8 +125,9 @@ if __name__ == "__main__":
                 tf.keras.callbacks.CSVLogger(os.path.join(results_folder, training_log_filename)),
                 tf.keras.callbacks.EarlyStopping(patience=patience, restore_best_weights=True),
             ],
-	    workers = tf.data.AUTOTUNE,
+	        workers = tf.data.AUTOTUNE,
             use_multiprocessing=True
+            
         )
 
     # Evaluate the model on test set
