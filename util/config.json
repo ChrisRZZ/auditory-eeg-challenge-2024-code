@@ -1,7 +1,7 @@
 {
-  "dataset_folder": "PATH/TO/sparrKULee",
-  "derivatives_folder": "derivatives",
-  "preprocessed_eeg_folder": "preprocessed_eeg",
-  "preprocessed_stimuli_folder": "preprocessed_stimuli",
-  "split_folder": "split_data"
+  "dataset_folder": "/Users/zhezhengren/Desktop/NeuroPrior_AI/Auditory-eeg-challenge---icassp-2024/dataset",
+  "derivatives_folder": "/Users/zhezhengren/Desktop/NeuroPrior_AI/Auditory-eeg-challenge---icassp-2024/dataset/derivatives",
+  "preprocessed_eeg_folder": "/Users/zhezhengren/Desktop/NeuroPrior_AI/Auditory-eeg-challenge---icassp-2024/dataset/derivatives/preprocessed_eeg",
+  "preprocessed_stimuli_folder": "/Users/zhezhengren/Desktop/NeuroPrior_AI/Auditory-eeg-challenge---icassp-2024/dataset/derivatives/preprocessed_stimuli",
+  "split_folder": "/Users/zhezhengren/Desktop/NeuroPrior_AI/Auditory-eeg-challenge---icassp-2024/dataset/derivatives/split_data"
 }

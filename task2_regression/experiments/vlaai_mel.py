@@ -68,7 +68,7 @@ if __name__ == "__main__":
     epochs = 100
     patience = 10
     batch_size = 10
-    only_evaluate = True
+    only_evaluate = False # If it is true, will only evaluate
     training_log_filename = "training_log.csv"
     results_filename = 'eval.json'
 

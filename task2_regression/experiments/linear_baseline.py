@@ -73,7 +73,7 @@ if __name__ == "__main__":
     epochs = 100
     patience = 5
     batch_size = 64
-    only_evaluate = True
+    only_evaluate = False # if true, only evaluate the model
 
     # Get the path to the config gile
     experiments_folder = os.path.dirname(__file__)
