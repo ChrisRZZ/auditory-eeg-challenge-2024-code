@@ -68,7 +68,7 @@ if __name__ == "__main__":
     epochs = 100
     patience = 10
     batch_size = 10
-    only_evaluate = False # If it is true, will only evaluate
+    only_evaluate = True # If it is true, will only evaluate
     training_log_filename = "training_log.csv"
     results_filename = 'eval.json'
 
@@ -89,7 +89,7 @@ if __name__ == "__main__":
     data_folder = os.path.join(config["dataset_folder"],config["derivatives_folder"],  config["split_folder"])
     stimulus_features = ["mel"]
     features = ["eeg"] + stimulus_features
-
+    
 
     # Create a directory to store (intermediate) results
     results_folder = os.path.join(experiments_folder, "results_vlaai_mel")
@@ -99,7 +99,11 @@ if __name__ == "__main__":
     model = vlaai()
     #model.compile(tf.keras.optimizers.Adam(), loss=pearson_loss, metrics=[pearson_metric])
     model.compile(tf.keras.optimizers.legacy.Adam(), loss=pearson_loss, metrics=[pearson_metric]) #this is for M1/M2 Mac
-    model_path = os.path.join(results_folder, "model.h5")
+    # model_path = os.path.join(results_folder, "model.h5")
+    model_path = os.path.join(results_folder, "vlaai.h5")
+    
+    print("Model input shape:", model.input_shape)
+    print("Shape of EEG data:", eeg.shape)
 
     if only_evaluate:
 
