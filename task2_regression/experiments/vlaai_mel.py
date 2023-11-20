@@ -99,12 +99,9 @@ if __name__ == "__main__":
     model = vlaai()
     #model.compile(tf.keras.optimizers.Adam(), loss=pearson_loss, metrics=[pearson_metric])
     model.compile(tf.keras.optimizers.legacy.Adam(), loss=pearson_loss, metrics=[pearson_metric]) #this is for M1/M2 Mac
-    # model_path = os.path.join(results_folder, "model.h5")
+    #model_path = os.path.join(results_folder, "model.h5")
     model_path = os.path.join(results_folder, "vlaai.h5")
     
-    print("Model input shape:", model.input_shape)
-    print("Shape of EEG data:", eeg.shape)
-
     if only_evaluate:
 
         model.load_weights(model_path)

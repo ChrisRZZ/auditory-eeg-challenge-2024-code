@@ -18,49 +18,6 @@ import numpy as np
 
 from task2_regression.models.linear import simple_linear_model, pearson_loss_cut, pearson_metric_cut, pearson_metric_cut_non_averaged
 from util.dataset_generator import DataGenerator, create_tf_dataset
-
-
-# def evaluate_model(model, test_dict):
-#     """Evaluate a model.
-
-#     Parameters
-#     ----------
-#     model: tf.keras.Model
-#         Model to evaluate.
-#     test_dict: dict
-#         Mapping between a subject and a tf.data.Dataset containing the test
-#         set for the subject.
-
-#     Returns
-#     -------
-#     dict
-#         Mapping between a subject and the loss/evaluation score on the test set
-#     """
-#     evaluation = {}
-#     for subject, ds_test in test_dict.items():
-#         logging.info(f"Scores for subject {subject}:")
-#            # evaluate model
-#         ds = [x for x in ds_test]
-#         eeg = tf.concat([ x[0] for x in ds], axis=0)
-#         labels =tf.concat([ x[1] for x in ds], axis=0)
-
-
-#         reconstructions = model.predict(eeg)
-#         correlations = np.squeeze(pearson_metric_cut_non_averaged(labels, reconstructions))
-
-#         # calculate pearson correlation per band
-
-#         results = model.evaluate(ds_test, verbose=2)
-
-#         metrics = model.metrics_names
-#         evaluation[subject] = dict(zip(metrics, results))
-
-
-#         evaluation[subject]["pearson_correlation_per_band"] = np.mean(correlations, axis=0).tolist()
-#         # metrics = model.metrics_names
-#         # evaluation[subject] = dict(zip(metrics, results))
-#     return evaluation
-
 import matplotlib.pyplot as plt
 import seaborn as sns
 import pandas as pd
@@ -151,17 +108,7 @@ def evaluate_model(model, test_dict):
             plt.legend()
             plt.savefig(os.path.join(reconstruction_folder, f'reconstruction_{subject}_{i+1}.png'))
             plt.close()
-            
-        #  # Visualization of predictions
-        # for i in range(min(3, len(eeg))):  # Plot up to 3 examples
-        #     plt.figure(figsize=(12, 4))
-        #     plt.plot(eeg[i], label='Actual EEG')
-        #     plt.plot(reconstructions[i], label='Predicted EEG')
-        #     plt.title(f'EEG Signal and Reconstruction for Subject {subject} - Example {i+1}')
-        #     plt.legend()
-        #     plt.savefig(os.path.join(reconstruction_folder, f'prediction_{subject}_{i+1}.png'))
-        #     plt.close()
-        
+                    
         # Diagnostic print statements to verify the shapes at runtime
         print(f"Shape of eeg: {eeg.shape}")
         print(f"Shape of reconstructions: {reconstructions.shape}")
@@ -185,7 +132,7 @@ def evaluate_model(model, test_dict):
             plt.legend()
             plt.savefig(os.path.join(reconstruction_folder, f'prediction_{subject}_{i+1}.png'))
             plt.close()
-            
+               
     # Return the evaluation dictionary and the metrics
     return evaluation, mse_scores, mae_scores, rmse_scores
 
@@ -252,20 +199,6 @@ if __name__ == "__main__":
         val_generator = DataGenerator(val_files, window_length)
         dataset_val = create_tf_dataset(val_generator, window_length, None, hop_length, batch_size, data_types=(tf.float32, tf.float32), feature_dims=(64, 10))
 
-        # # Train the model
-        # model.fit(
-        #     dataset_train,
-        #     epochs=epochs,
-        #     validation_data=dataset_val,
-        #     callbacks=[
-        #         tf.keras.callbacks.ModelCheckpoint(model_path, save_best_only=True),
-        #         tf.keras.callbacks.CSVLogger(os.path.join(results_folder, training_log_filename)),
-        #         tf.keras.callbacks.EarlyStopping(patience=patience, restore_best_weights=True),
-        #     ],
-        #     workers = tf.data.AUTOTUNE,
-        #     use_multiprocessing=True
-
-        # )
         # Train the model
         history = model.fit(
             dataset_train,
@@ -366,11 +299,7 @@ if __name__ == "__main__":
 
     # We can save our results in a json encoded file
     results_path = os.path.join(results_folder, results_filename)
-    # with open(results_path, "w") as fp:
-    #     json.dump(evaluation, fp)
-    # logging.info(f"Results saved at {results_path}")
-    
+   
     # When saving the evaluation results
 with open(results_path, "w") as fp:
     json.dump(evaluation, fp)
-
