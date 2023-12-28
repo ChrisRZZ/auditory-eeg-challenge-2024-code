@@ -68,7 +68,7 @@ if __name__ == "__main__":
     epochs = 100
     patience = 10
     batch_size = 10
-    only_evaluate = True # If it is true, will only evaluate
+    only_evaluate = False # If it is true, will only evaluate
     training_log_filename = "training_log.csv"
     results_filename = 'eval.json'
 
@@ -99,8 +99,8 @@ if __name__ == "__main__":
     model = vlaai()
     #model.compile(tf.keras.optimizers.Adam(), loss=pearson_loss, metrics=[pearson_metric])
     model.compile(tf.keras.optimizers.legacy.Adam(), loss=pearson_loss, metrics=[pearson_metric]) #this is for M1/M2 Mac
-    #model_path = os.path.join(results_folder, "model.h5")
-    model_path = os.path.join(results_folder, "vlaai.h5")
+    model_path = os.path.join(results_folder, "model.h5")
+    #model_path = os.path.join(results_folder, "vlaai.h5")
     
     if only_evaluate:
 
@@ -115,20 +115,36 @@ if __name__ == "__main__":
         val_files = [x for x in glob.glob(os.path.join(data_folder, "val_-_*")) if os.path.basename(x).split("_-_")[-1].split(".")[0] in features ]
         val_generator = DataGenerator(val_files, window_length)
         dataset_val = create_tf_dataset(val_generator, window_length, None, hop_length, batch_size, data_types=(tf.float32, tf.float32), feature_dims=(64, 10))
+        
+        # Adjust the number of epochs
+        epochs = 50  # Example: Reduce the number of epochs if it's currently very high
 
-        # Train the model
+        # Further reduce the patience in EarlyStopping
+        early_stopping_callback = tf.keras.callbacks.EarlyStopping(
+            patience=3,  # Further reduce patience
+            restore_best_weights=True,
+            monitor='val_loss',  # Change to 'val_loss' if more appropriate
+            verbose=1  # Enable verbose output
+        )
+
+        # Optional: Add a learning rate scheduler
+        lr_scheduler = tf.keras.callbacks.ReduceLROnPlateau(
+            monitor='val_loss', factor=0.5, patience=3, verbose=1
+        )
+
+        # Update the model.fit call with new parameters
         model.fit(
             dataset_train,
-            epochs=epochs,
+            epochs=epochs,  # Keep the epochs reasonable
             validation_data=dataset_val,
             callbacks=[
                 tf.keras.callbacks.ModelCheckpoint(model_path, save_best_only=True),
                 tf.keras.callbacks.CSVLogger(os.path.join(results_folder, training_log_filename)),
-                tf.keras.callbacks.EarlyStopping(patience=patience, restore_best_weights=True),
+                early_stopping_callback,  # Updated EarlyStopping callback
+                lr_scheduler  # Optional learning rate scheduler
             ],
-	        workers = tf.data.AUTOTUNE,
+            workers=tf.data.AUTOTUNE,
             use_multiprocessing=True
-            
         )
 
     # Evaluate the model on test set

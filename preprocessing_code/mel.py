@@ -45,6 +45,7 @@ def calculate_mel_spectrogram(
 
     speech = dict(np.load(audio_path))
     audio, fs = speech["audio"], speech["fs"]
+    #audio, fs = librosa.load(audio_path, sr=None)
     if not hop_length:
         hop_length = int((1 / target_fs) * fs)  # this will downsample the signal to target_fs Hz
     if not win_length:
@@ -53,6 +54,7 @@ def calculate_mel_spectrogram(
     # Finds the closest power of 2
     # that is bigger than win_length
     n_fft = int(math.pow(2, math.ceil(math.log2(win_length))))
+    print("n_fft: ", n_fft)
 
     # DC removal
     audio = audio - np.mean(audio)

@@ -11,6 +11,7 @@ def extractor(
     input_channels=64,
     normalization_fn=lambda x: tf.keras.layers.LayerNormalization()(x),
     activation_fn=lambda x: tf.keras.layers.LeakyReLU()(x),
+    dropout_rate=0.5,  # New parameter for dropout rate
     name="extractor",
 ):
     """Construct the extractor model.
@@ -55,6 +56,11 @@ def extractor(
         x = normalization_fn(x)
         x = activation_fn(x)
         x = tf.keras.layers.ZeroPadding1D((0, kernel - 1))(x)
+        
+        # After each activation, add a dropout layer
+        x = activation_fn(x)
+        x = tf.keras.layers.Dropout(dropout_rate)(x)  # Adding dropout here
+
 
     return tf.keras.models.Model(inputs=[eeg], outputs=[x], name=name)
 
